@@ -1,34 +1,94 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
+using TMPro;
 
 public class CalculatorPanels : MonoBehaviour
 {
+    [SerializeField] private TMP_Text typeName;
+    [SerializeField] private GameObject converterPanel;
+    [SerializeField] private GameObject extraConverterPanel;
+
     private string standartType = "Standart";
-    private string scientificType = "Scientific";
+    private string scientificType = "Scientific";  
+    private string lenghtType = "Lenght";
+    private string volumeType = "Volume";
 
     private GameObject[] scientificPanels;
     private GameObject[] stantartPanels;
 
+    private RectTransform panelsRect;
+    private Vector2 calculatorPaneMaxAnchors = new Vector2(1, 0.7f);
+    private Vector2 converterPaneMaxAnchors = new Vector2(1, 0.4f);
+           
     private void Awake()
     {
         scientificPanels = GameObject.FindGameObjectsWithTag(scientificType);
         stantartPanels = GameObject.FindGameObjectsWithTag(standartType);
 
-        HidePanel(scientificPanels);
+        panelsRect = GetComponent<RectTransform>();
+
+        ShowStandart(true);
+
+        converterPanel.SetActive(false);
     }
 
-    private void HidePanel(GameObject[] panels)
+    private void Update()
     {
-        foreach (var panel in panels)
-            panel.SetActive(false);
+        if (converterPanel.activeSelf)
+        {
+            panelsRect.anchorMax = converterPaneMaxAnchors;
+            extraConverterPanel.SetActive(true);
+        }
+        else 
+        {
+            panelsRect.anchorMax = calculatorPaneMaxAnchors;
+            extraConverterPanel.SetActive(false);
+        }  
     }
 
-    private void ShowPanel(GameObject[] panels) 
+    public void ShowStandart(bool empty) 
+    {
+        typeName.text = standartType;
+
+        SwitchPanels(stantartPanels, true);
+        SwitchPanels(scientificPanels, false);
+
+        converterPanel.SetActive(false);
+    }
+
+    public void ShowScientific(bool empty) 
+    {
+        typeName.text = scientificType;
+
+        SwitchPanels(scientificPanels, true);
+        SwitchPanels(stantartPanels, false);
+
+        converterPanel.SetActive(false);
+    }
+
+    public void ShowLenghtConverter(bool empty) 
+    {
+        typeName.text = lenghtType;
+
+        SwitchPanels(scientificPanels, false);
+        SwitchPanels(stantartPanels, false);
+
+        converterPanel.SetActive(true);
+    }
+    public void ShowVolumeConverter(bool empty)
+    {
+        typeName.text = volumeType;
+
+        SwitchPanels(scientificPanels, false);
+        SwitchPanels(stantartPanels, false);
+
+        converterPanel.SetActive(true);
+    }
+
+    private void SwitchPanels(GameObject[] panels, bool onOff)
     {
         foreach (var panel in panels)
-            panel.SetActive(true);
+        {
+            panel.SetActive(onOff);
+        }
     }
 }
