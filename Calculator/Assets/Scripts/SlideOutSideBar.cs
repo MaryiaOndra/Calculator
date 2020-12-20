@@ -23,6 +23,7 @@ public class SlideOutSideBar : MonoBehaviour
     private void Show() 
     {
         canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
         canvasGroup.alpha = 1;
         isShowed = true;        
     }
@@ -30,6 +31,7 @@ public class SlideOutSideBar : MonoBehaviour
     private void Hide() 
     {
         canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
         canvasGroup.alpha = 0;
         isShowed = false;        
     }
