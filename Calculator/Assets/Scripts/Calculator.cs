@@ -11,93 +11,114 @@ public class Calculator : MonoBehaviour
     [SerializeField] private TMP_InputField inputFieldText;
     [SerializeField] private TMP_Text formulaText;
 
-    private DataTable dt = new DataTable();
+    private double result = 0.0f;
+    private double tempResult = 0.0f;
+    private float multyplayer = 1;
 
-    private string buttonValue;
-    private string result;
+    private string operation;
+    private string formatResult;
 
-    private bool isEqualPressed;
-    private bool isNumberPressed;
-    private bool isOperatorPressed;
 
-    public void NumberPressed(string button) 
+    private int operationsNumber = 0;
+
+    private bool isCalculatedResult; 
+
+    public void WriteToTextField()
     {
-        isNumberPressed = true;
-
-        if (isOperatorPressed)
+        if (multyplayer == 1)
         {
-            buttonValue = string.Empty;
-            isOperatorPressed = false;
-        }
-        else if (isEqualPressed)
-        {
-            ResetAll();
-            isEqualPressed = false;
-        }      
-
-        buttonValue += button;
-        inputFieldText.text = buttonValue;
-    }
-
-    public void OperatorPressed(string operatorSign) 
-    {
-        isOperatorPressed = true;
-
-        formulaText.text += buttonValue;
-        
-        //_ = double.TryParse(buttonValue, out double buttonValueDouble);
-
-        switch (operatorSign)
-        {
-            case "+":
-            case "-":
-            case "/":
-            case "*":
-                formulaText.text += operatorSign;
-                break;
-
-            case "%":
-                break;
-
-            case "1/x":
-                break;
-
-            case "√x":
-                break;
-            default:
-                break;
-        }
-        isNumberPressed = false;
-    }
-
-    public void ResetAll()
-    {
-        buttonValue = string.Empty;
-        inputFieldText.text = string.Empty;
-        formulaText.text = string.Empty;
-    }
-
-    public void ResetInputLine()
-    {
-        if (!isEqualPressed)
-        {
-            inputFieldText.text = string.Empty;
-            buttonValue = string.Empty;
+            inputFieldText.text = "" + result;
         }
         else
-            ResetAll();
+        {
+            formatResult = string.Format("{0:0.00}", result);
+            inputFieldText.text = "" + formatResult;
+        }
     }
 
-    public void ComputeResult()
+    public void ClearResult() 
     {
-        if (!isEqualPressed)
+        result = 0.0f;
+        multyplayer = 1;
+        formulaText.text = string.Empty;
+        operationsNumber = 0;
+        WriteToTextField();
+    }
+
+    public void SaveOperation(string op) 
+    {
+        operation = op;
+
+        if (multyplayer == 1)
+            formulaText.text += result + op;
+        else
+            formulaText.text += formatResult + op;
+
+        if (operationsNumber < 1)
+            tempResult = result;
+
+        if (!isCalculatedResult && (operationsNumber >= 1))
+            CalculateTemporaryResult();
+
+        operationsNumber++;
+        multyplayer = 1;
+        result = 0.0f;
+    }
+
+    public void AddDigit(int d)
+    {
+        if (multyplayer == 1)
         {
-            formulaText.text += buttonValue;        
-            isEqualPressed = true;
-            Debug.Log(formulaText.text);
-            result = (dt.Compute(formulaText.text, string.Empty)).ToString();
-            formulaText.text += "=";
-            inputFieldText.text = result;
+            result *= 10;
+            result += d;
+        }
+        else
+        {
+            result += d * multyplayer;
+            multyplayer *= 0.1f;
+        }
+
+        WriteToTextField();
+    }
+
+    public void SetMultyplayer() 
+    {
+        multyplayer = 0.1f;
+    }
+
+    public void CalculateTemporaryResult() 
+    {
+        switch (operation)
+        {
+            case "+":
+                tempResult = tempResult + result;
+                break;
+            case "-":
+                tempResult = tempResult - result;
+                break;
+            case "*":
+                tempResult = tempResult * result;
+                break;
+            case "/":
+                tempResult = tempResult / result;
+                break;             
+        }
+    }
+
+    public void CalculateResult()
+    {
+        if (!isCalculatedResult)
+        {
+            formulaText.text += result + "=";
+            CalculateTemporaryResult();
+
+            result = tempResult;
+            WriteToTextField();
+
+            operation = string.Empty;
+            multyplayer = 1;
+            operationsNumber = 0;
+            isCalculatedResult = true;
         }
     }
 }
