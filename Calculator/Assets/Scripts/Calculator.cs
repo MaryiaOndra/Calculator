@@ -17,11 +17,13 @@ public class Calculator : MonoBehaviour
     private double tempResult = 0.0f;
     private float multyplayer = 1;
     private int operationsNumber = 0;
-    private int maxInputNumber = 10;
+    private int maxInputNumber = 16;
     private int countMultyplayer = 3;
+    private int countSignOperation = 0;
 
     private string operation;
     private string formatResult;
+    private string tempFormulaText, tempFormulaResult;
 
     private bool isCalculatedResult;
     private bool dontSaveOperation;
@@ -31,47 +33,9 @@ public class Calculator : MonoBehaviour
         inputFieldText.text = "" + result;
     }
 
-    public void ResetAll() 
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    public void ResetInputField() 
-    {
-        if (!isCalculatedResult)
-        {
-            result = 0.0f;
-            multyplayer = 1;
-            isCalculatedResult = false;
-            WriteToTextField();
-        }
-        else 
-            ResetAll();
-    }
-
-    public void SaveOperation(string op)
-    {
-        if (!isCalculatedResult)
-        {
-            operation = op;
-
-            formulaText.text += result + op;
-
-            if (operationsNumber < 1)
-                tempResult = result;
-
-            if (!isCalculatedResult && (operationsNumber >= 1))
-                CalculateTemporaryResult();
-
-            ResetMultyplayer();
-            dontSaveOperation = false;
-            operationsNumber++;
-            result = 0.0f;
-        }
-    }
-
     public void AddDigit(int d)
     {
+
         if (result.ToString().Length <= maxInputNumber)
         {
             if (isCalculatedResult)
@@ -101,14 +65,26 @@ public class Calculator : MonoBehaviour
         }
     }
 
-    public void SetMultyplayer() 
+    public void SaveOperation(string op)
     {
-        multyplayer = 0.1f;
-    }
-    private void ResetMultyplayer() 
-    {
-        countMultyplayer = 3;
-        multyplayer = 1f;
+        if (!isCalculatedResult)
+        {
+            operation = op;
+
+            _ = !dontSaveOperation ? (formulaText.text += result + op) : (formulaText.text += op);
+
+            if (operationsNumber < 1)
+                tempResult = result;
+
+            if (!isCalculatedResult && (operationsNumber >= 1))
+                CalculateTemporaryResult();
+
+            ResetMultyplayer();
+            dontSaveOperation = false;
+            operationsNumber++;
+            result = 0.0f;
+            countSignOperation = 0;
+        }
     }
 
     public void CalculateTemporaryResult() 
@@ -137,18 +113,15 @@ public class Calculator : MonoBehaviour
             switch (sign)
             {
                 case "1/x":
-                    dontSaveOperation = true;
-                    formulaText.text += $"1/({result})";
-                    tempResult = 1 / result;
+                    ChangeFormulaText("1/");
+                    result = 1 / result;
                     break;
                 case "x²":
-                    dontSaveOperation = true;
-                    formulaText.text += $"sqr({result})";
+                    ChangeFormulaText("sqr");
                     result *= result;
                     break;
                 case "√x":
-                    dontSaveOperation = true;
-                    formulaText.text += $"√({result})";
+                    ChangeFormulaText("√");
                     result = Mathf.Sqrt((float)result);
                     break;
                 case "%":
@@ -159,17 +132,12 @@ public class Calculator : MonoBehaviour
                     result *= -1;
                     break;
                 case "delete":
-                    string stringResult= result.ToString();
-                    string stringResultMinus1 = stringResult.Remove(stringResult.Length - 1, 1);
-                    if (stringResultMinus1.Length < 1)
-                        ResetInputField();
-                    else
-                        result = double.Parse(stringResultMinus1);
-                    
+                    DeleteLastDigit();               
                     break;
             }
 
             WriteToTextField();
+            countSignOperation++;
         }
     }
 
@@ -193,5 +161,58 @@ public class Calculator : MonoBehaviour
             result = tempResult;
             WriteToTextField();
         }
+    }
+    public void ResetAll()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void ResetInputField()
+    {
+        if (!isCalculatedResult)
+        {
+            result = 0.0f;
+            multyplayer = 1;
+            isCalculatedResult = false;
+            WriteToTextField();
+        }
+        else
+            ResetAll();
+    }
+    public void SetMultyplayer()
+    {
+        multyplayer = 0.1f;
+    }
+    private void ResetMultyplayer()
+    {
+        countMultyplayer = 3;
+        multyplayer = 1f;
+    }
+
+    private void ChangeFormulaText(string sign)
+    {
+        dontSaveOperation = true;
+
+        if (countSignOperation <= 0)
+        {
+            tempFormulaText = formulaText.text;
+            tempFormulaResult = sign + '(' + result + ')';
+            formulaText.text += tempFormulaResult;
+        }
+        else
+        {
+            tempFormulaResult = sign + '(' + tempFormulaResult + ')';
+            formulaText.text = tempFormulaText + tempFormulaResult;
+        }
+    }
+
+    private void DeleteLastDigit()
+    {
+        string stringResult = result.ToString();
+        string stringResultMinus1 = stringResult.Remove(stringResult.Length - 1, 1);
+        if (stringResultMinus1.Length < 1)
+            ResetInputField();
+        else
+            result = double.Parse(stringResultMinus1);
     }
 }
