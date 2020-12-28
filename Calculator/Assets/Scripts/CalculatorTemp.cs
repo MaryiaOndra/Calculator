@@ -1,19 +1,24 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using System.Data;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using System;
 
-public class Calculator : MonoBehaviour
+public class CalculatorTemp : MonoBehaviour
 {
+    [SerializeField] private MainNumberPanel numberPanel;
+
+    private double result;
+
+    private void Awake()
+    {
+        result = numberPanel.Result;
+    }
+
     [SerializeField] private TMP_InputField inputFieldText;
     [SerializeField] private TMP_Text formulaText;
 
-    private double result = 0.0f;
     private double tempResult = 0.0f;
     private float multyplayer = 1;
     private int operationsNumber = 0;
@@ -27,8 +32,6 @@ public class Calculator : MonoBehaviour
 
     private bool isCalculatedResult;
     private bool dontSaveOperation;
-
-    public double Result => result;
 
     public void WriteToTextField()
     {
@@ -55,7 +58,7 @@ public class Calculator : MonoBehaviour
                 result += d;
             }
             else
-            {                
+            {
                 double draftDigit = d * multyplayer;
                 double clearDigit = Math.Round((float)draftDigit, countMultyplayer);
                 result += clearDigit;
@@ -89,7 +92,7 @@ public class Calculator : MonoBehaviour
         }
     }
 
-    public void CalculateTemporaryResult() 
+    public void CalculateTemporaryResult()
     {
         switch (operation)
         {
@@ -108,7 +111,7 @@ public class Calculator : MonoBehaviour
         }
     }
 
-    public void CalculateSignOperations(string sign) 
+    public void CalculateSignOperations(string sign)
     {
         if (!isCalculatedResult)
         {
@@ -134,7 +137,7 @@ public class Calculator : MonoBehaviour
                     result *= -1;
                     break;
                 case "delete":
-                    DeleteLastDigit();               
+                    DeleteLastDigit();
                     break;
             }
 
@@ -154,7 +157,7 @@ public class Calculator : MonoBehaviour
                 formulaText.text += "=";
                 tempResult = result;
             }
-            else 
+            else
             {
                 formulaText.text += result + "=";
             }

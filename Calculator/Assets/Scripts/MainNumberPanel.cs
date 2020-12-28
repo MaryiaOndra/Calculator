@@ -24,6 +24,8 @@ public class MainNumberPanel : MonoBehaviour
     private bool isCalculatedResult;
     //private bool dontSaveOperation;
 
+    public double Result => result;
+
     public void WriteToTextField()
     {
         inputFieldText.text = "" + result;
