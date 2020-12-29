@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System.Data;
 using UnityEngine.SceneManagement;
+using System;
 
-public class CalculatorTemp : MonoBehaviour
+public class Calculator : MonoBehaviour
 {
-    [SerializeField] private MainNumberPanel numberPanel;
-
-    private double result;
-
-    private void Awake()
-    {
-        result = numberPanel.Result;
-    }
-
     [SerializeField] private TMP_InputField inputFieldText;
     [SerializeField] private TMP_Text formulaText;
 
+    private double result = 0.0f;
     private double tempResult = 0.0f;
     private float multyplayer = 1;
     private int operationsNumber = 0;
@@ -33,6 +28,8 @@ public class CalculatorTemp : MonoBehaviour
     private bool isCalculatedResult;
     private bool dontSaveOperation;
 
+    public double Result => result;
+
     public void WriteToTextField()
     {
         inputFieldText.text = "" + result;
@@ -40,8 +37,9 @@ public class CalculatorTemp : MonoBehaviour
 
     public void AddDigit(int d)
     {
+        int resultLenght = result.ToString().Length;
 
-        if (result.ToString().Length <= maxInputNumber)
+        if (resultLenght <= maxInputNumber)
         {
             if (isCalculatedResult)
             {
@@ -60,7 +58,7 @@ public class CalculatorTemp : MonoBehaviour
             else
             {
                 double draftDigit = d * multyplayer;
-                double clearDigit = Math.Round((float)draftDigit, countMultyplayer);
+                double clearDigit = Math.Round(draftDigit, countMultyplayer);
                 result += clearDigit;
                 multyplayer *= 0.1f;
                 countMultyplayer++;
@@ -92,7 +90,7 @@ public class CalculatorTemp : MonoBehaviour
         }
     }
 
-    public void CalculateTemporaryResult()
+    public void CalculateTemporaryResult() 
     {
         switch (operation)
         {
@@ -111,7 +109,7 @@ public class CalculatorTemp : MonoBehaviour
         }
     }
 
-    public void CalculateSignOperations(string sign)
+    public void CalculateSignOperations(string sign) 
     {
         if (!isCalculatedResult)
         {
@@ -137,7 +135,7 @@ public class CalculatorTemp : MonoBehaviour
                     result *= -1;
                     break;
                 case "delete":
-                    DeleteLastDigit();
+                    DeleteLastDigit();               
                     break;
             }
 
@@ -157,7 +155,7 @@ public class CalculatorTemp : MonoBehaviour
                 formulaText.text += "=";
                 tempResult = result;
             }
-            else
+            else 
             {
                 formulaText.text += result + "=";
             }

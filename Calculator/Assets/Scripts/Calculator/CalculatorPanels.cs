@@ -16,8 +16,8 @@ public class CalculatorPanels : MonoBehaviour
     private GameObject[] stantartPanels;
 
     private RectTransform panelsRect;
-    private Vector2 calculatorPaneMaxAnchors = new Vector2(1, 0.7f);
-    private Vector2 converterPaneMaxAnchors = new Vector2(1, 0.4f);
+    private Vector2 calculatorPanelMaxAnchors = new Vector2(1, 0.7f);
+    private Vector2 converterPanelMaxAnchors = new Vector2(1, 0.4f);
            
     private void Awake()
     {
@@ -35,12 +35,12 @@ public class CalculatorPanels : MonoBehaviour
     {
         if (converterPanel.activeSelf)
         {
-            panelsRect.anchorMax = converterPaneMaxAnchors;
+            panelsRect.anchorMax = converterPanelMaxAnchors;
             extraConverterPanel.SetActive(true);
         }
         else 
         {
-            panelsRect.anchorMax = calculatorPaneMaxAnchors;
+            panelsRect.anchorMax = calculatorPanelMaxAnchors;
             extraConverterPanel.SetActive(false);
         }  
     }
@@ -74,6 +74,7 @@ public class CalculatorPanels : MonoBehaviour
 
         converterPanel.SetActive(true);
     }
+
     public void ShowVolumeConverter(bool empty)
     {
         typeName.text = volumeType;
