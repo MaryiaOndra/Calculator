@@ -1,5 +1,5 @@
 ﻿
-public class DropdownBottomLenght : DropdownConverter<ConverterEnums.LenghtTypes>
+public class DropdownBottomVolume : DropdownConverter<ConverterEnums.VolumeTypes>
 {
     public int BottomIndex { get; private set; }
 

@@ -15,10 +15,13 @@ public static class ConverterEnums
 
     public enum VolumeTypes 
     {
+       Liters,
        Milliliters,
        CubicCentimetres,
        CubicInches,
-       CubicFeet,
-       CubicYards,
+       CubicFoot,
+       CubicMeter,
+       CupsUS,
+       PintsUS,
     } 
 }

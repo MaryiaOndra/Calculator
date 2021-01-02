@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class LenghtConverter : DropdownConverter<ConverterEnums.LenghtTypes>
 {
     [SerializeField] private TMP_Text resultField;
+    [SerializeField] private DropdownBottomLenght bottomLenght;
+
     private double convertedResult;
     private double resultInMeters;
     private double inputResult;
@@ -17,7 +16,7 @@ public class LenghtConverter : DropdownConverter<ConverterEnums.LenghtTypes>
     private void Update()
     {
         inputResult = gameObject.GetComponentInParent<ConverterPanels>().InputResult;
-        bottomIndex = GetComponentInChildren<DropdownBottomLenght>().BottomIndex;
+        bottomIndex = bottomLenght.BottomIndex;
 
         ConvertToMeters(topIndex);
         ConvertLenght(bottomIndex);
@@ -53,6 +52,9 @@ public class LenghtConverter : DropdownConverter<ConverterEnums.LenghtTypes>
                 break;
             case (int)ConverterEnums.LenghtTypes.Yards:
                 resultInMeters = inputResult / 1.094f;
+                break;        
+            case (int)ConverterEnums.LenghtTypes.Meters:
+                resultInMeters = inputResult;
                 break;
         }
     }
@@ -68,10 +70,7 @@ public class LenghtConverter : DropdownConverter<ConverterEnums.LenghtTypes>
             case (int)ConverterEnums.LenghtTypes.Centimeters:
                 Debug.Log("2Centimeters");
                 convertedResult = resultInMeters * 100;
-                break;           
-            case (int)ConverterEnums.LenghtTypes.Meters:
-                convertedResult = resultInMeters;
-                break;
+                break;        
             case (int)ConverterEnums.LenghtTypes.Kilometers:
                 convertedResult = resultInMeters / 1000;
                 break;
@@ -86,6 +85,9 @@ public class LenghtConverter : DropdownConverter<ConverterEnums.LenghtTypes>
                 break;
             case (int)ConverterEnums.LenghtTypes.Yards:
                 convertedResult = resultInMeters * 1.094f;
+                break;
+            case (int)ConverterEnums.LenghtTypes.Meters:
+                convertedResult = resultInMeters;
                 break;
         }
     }

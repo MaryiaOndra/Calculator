@@ -11,8 +11,9 @@ public class ConverterPanels : MonoBehaviour
     [SerializeField] private TMP_Text resultField;
 
     [SerializeField] private TMP_Dropdown topDropdownLenght;
-
+    [SerializeField] private TMP_Dropdown bottomDropdownLenght;
     [SerializeField] private TMP_Dropdown topDropdownVolume;
+    [SerializeField] private TMP_Dropdown bottomDropdownVolume;
 
     protected double convertResult = 0.0f;
     public double InputResult { get; private set; }    
@@ -36,7 +37,9 @@ public class ConverterPanels : MonoBehaviour
         UsedVolumeConverter = false;
 
         topDropdownLenght.gameObject.SetActive(true);
+        bottomDropdownLenght.gameObject.SetActive(true);
         topDropdownVolume.gameObject.SetActive(false);
+        bottomDropdownVolume.gameObject.SetActive(false);
 
     }
 
@@ -46,6 +49,8 @@ public class ConverterPanels : MonoBehaviour
         UsedLenghtConverter = false;
 
         topDropdownLenght.gameObject.SetActive(false);
+        bottomDropdownLenght.gameObject.SetActive(false);
         topDropdownVolume.gameObject.SetActive(true);
+        bottomDropdownVolume.gameObject.SetActive(true);
     }
 }
