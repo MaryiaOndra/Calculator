@@ -40,7 +40,6 @@ public class ConverterPanels : MonoBehaviour
         bottomDropdownLenght.gameObject.SetActive(true);
         topDropdownVolume.gameObject.SetActive(false);
         bottomDropdownVolume.gameObject.SetActive(false);
-
     }
 
     public void UseVolumeConverter(bool empty)

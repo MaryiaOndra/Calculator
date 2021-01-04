@@ -1,5 +1,4 @@
-﻿
-public static class ConverterEnums
+﻿public static class ConverterEnums
 {
     public enum LenghtTypes
     {

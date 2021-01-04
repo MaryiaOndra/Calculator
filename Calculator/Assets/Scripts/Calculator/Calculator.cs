@@ -1,10 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using System.Data;
 using UnityEngine.SceneManagement;
 using System;
 
@@ -22,7 +17,6 @@ public class Calculator : MonoBehaviour
     private int countSignOperation = 0;
 
     private string operation;
-    private string formatResult;
     private string tempFormulaText, tempFormulaResult;
 
     private bool isCalculatedResult;
@@ -136,6 +130,9 @@ public class Calculator : MonoBehaviour
                     break;
                 case "delete":
                     DeleteLastDigit();               
+                    break;
+                case "none":
+                    Debug.Log("Sorry! This operation is not working yet.");
                     break;
             }
 
